@@ -1,17 +1,19 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
+import { UsersService, ExpertService } from './service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Users, UserSchema } from './schema/users.schema';
 import { Experts, ExpertsSchema } from './schema/experts.schema';
 import { TransactionService } from '@app/database/transation.service';
 import { AuthModule } from '@app/auth';
 import { Otp, OtpSchema } from './schema/otp.schema';
-import { ProfileService } from './profile.service';
+import { ProfileService } from './service/profile.service';
+import { NlpModule } from '@app/nlp';
 
 @Module({
   imports: [
     AuthModule,
+    NlpModule,
     MongooseModule.forFeature([
       { name: Users.name, schema: UserSchema },
       { name: Experts.name, schema: ExpertsSchema },
@@ -19,6 +21,6 @@ import { ProfileService } from './profile.service';
     ]),
   ],
   controllers: [UsersController],
-  providers: [UsersService, TransactionService, ProfileService],
+  providers: [UsersService, TransactionService, ExpertService, ProfileService],
 })
 export class UsersModule {}

@@ -53,6 +53,15 @@
         "tsConfigPath": "apps/main/tsconfig.app.json"
       }
     },
+    "nlp": {
+      "type": "library",
+      "root": "libs/nlp",
+      "entryFile": "index",
+      "sourceRoot": "libs/nlp/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nlp/tsconfig.lib.json"
+      }
+    },
     "users": {
       "type": "application",
       "root": "apps/users",

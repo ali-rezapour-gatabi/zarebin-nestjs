@@ -39,6 +39,12 @@
       ],
       "@app/exeption-trace/*": [
         "libs/exeption-trace/src/*"
+      ],
+      "@app/nlp": [
+        "libs/nlp/src"
+      ],
+      "@app/nlp/*": [
+        "libs/nlp/src/*"
       ]
     }
   }

@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsDateString, IsNumber, IsBoolean, IsArray, IsOptional, IsEnum } from 'class-validator';
+import { IsString, IsArray, IsOptional, IsEnum, IsNumber } from 'class-validator';
 import { ExperienceYears } from '../schema/experts.schema';
 
 export class UserUpdateDto {
@@ -23,21 +23,15 @@ export class UserUpdateDto {
   @IsString()
   avatar?: string;
 
-  @ApiPropertyOptional({ example: '2025-01-01T10:00:00Z' })
-  @IsOptional()
-  @IsDateString()
-  updatedAt?: string;
-
-  @ApiPropertyOptional({ example: 1234567890 })
+  @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
   nationalId?: number;
 
   @ApiPropertyOptional({ example: ['backend', 'nestjs'] })
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  domains?: string[];
+  @IsString()
+  domains?: string;
 
   @ApiPropertyOptional({ example: ['auth', 'payments'] })
   @IsOptional()
@@ -54,27 +48,52 @@ export class UserUpdateDto {
   @ApiPropertyOptional({ example: 'Senior backend developer' })
   @IsOptional()
   @IsString()
-  bio?: string;
+  description?: string;
 
-  @ApiPropertyOptional({ example: true })
-  @IsOptional()
-  @IsBoolean()
-  verified?: boolean;
-
-  @ApiPropertyOptional({ example: ['cv.pdf', 'id.png'] })
+  @ApiPropertyOptional({ example: ['Payment system', 'Auth service'] })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  documents?: string[];
+  sampleJob?: string[];
 
-  @ApiPropertyOptional({ example: ['011-32450', '09379534460'] })
+  @ApiPropertyOptional({ example: 'full-time' })
+  @IsOptional()
+  @IsString()
+  availability?: string;
+
+  @ApiPropertyOptional({ example: ['https://linkedin.com/in/ali'] })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  contacts?: string[];
+  contactLinks?: string[];
+
+  @ApiPropertyOptional({ example: ['09379534460'] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  contactNumbers?: string[];
 
   @ApiPropertyOptional({ enum: ExperienceYears, example: ExperienceYears.THREE_TO_FIVE_YEARS })
   @IsOptional()
   @IsEnum(ExperienceYears)
-  experienceYears?: ExperienceYears;
+  yearsOfExperience?: ExperienceYears;
+
+  @ApiPropertyOptional({ type: 'string', isArray: true })
+  @IsOptional()
+  documents?: string[];
+
+  @ApiPropertyOptional({ example: 'province' })
+  @IsOptional()
+  @IsString()
+  province: string;
+
+  @ApiPropertyOptional({ example: 'city' })
+  @IsOptional()
+  @IsString()
+  city: string;
+
+  @ApiPropertyOptional({ example: 'city' })
+  @IsOptional()
+  @IsString()
+  location: string;
 }

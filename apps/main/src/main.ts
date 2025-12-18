@@ -53,4 +53,4 @@ async function bootstrap() {
   Logger.log('Server is running on port 3002');
 }
 
-bootstrap();
+void bootstrap();

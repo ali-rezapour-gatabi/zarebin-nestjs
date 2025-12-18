@@ -1,18 +1,18 @@
-import { Body, Controller, Patch, Post, Req, UseGuards, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { Body, Controller, Patch, Post, Req, UseGuards, UploadedFile, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { RegisterUserDto } from './dto/create-user.dto';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { UserUpdateDto } from './dto/update-user.dto';
-import { ProfileService } from './profile.service';
 import type { Request } from 'express';
 import { JwtAuthGuard } from '@app/auth';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { avatarStorage } from 'libs/utils/storage.utils';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { ExpertService, UsersService, ProfileService } from './service';
+import { filesStorage } from 'libs/utils/storage.utils';
 
 @Controller('identity')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
+    private readonly exportService: ExpertService,
     private readonly profileService: ProfileService,
   ) {}
 
@@ -31,7 +31,8 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @ApiBody({ type: UserUpdateDto })
-  @UseInterceptors(FileInterceptor('avatar', { storage: avatarStorage }))
+  @UseInterceptors(FileInterceptor('avatar', { storage: filesStorage }))
+  @ApiConsumes('multipart/form-data')
   @Patch('update-user')
   async updateUser(@Req() req: Request, @Body() model: UserUpdateDto, @UploadedFile() file?: Express.Multer.File) {
     const { userId } = req.user as { userId: string };
@@ -40,11 +41,20 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @ApiBody({ type: UserUpdateDto })
-  @Patch('expert-user')
-  async expertUser(@Body() model: UserUpdateDto, @Req() req: Request) {
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FilesInterceptor('documents', 3, { storage: filesStorage }))
+  @ApiConsumes('multipart/form-data')
+  @Post('expert-user')
+  async updateExpert(@Req() req: Request, @Body() model: UserUpdateDto, @UploadedFiles() documents: Express.Multer.File[]) {
     const { userId } = req.user as { userId: string };
-    const res = await this.profileService.updateExpert(userId, model);
-    return { success: true, result: res, message: 'ایتم مورد تظر با موفقیت ذخیره شد' };
+    return this.exportService.updateExpert(userId, model, documents);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('get-expert')
+  async getExeprt(@Req() req: Request) {
+    const { userId } = req.user as { userId: string };
+    const res = await this.exportService.getExperts(userId);
+    return { success: true, result: res, message: 'اعملیات مورد تظر با موفقیت دریافت شد' };
   }
 }

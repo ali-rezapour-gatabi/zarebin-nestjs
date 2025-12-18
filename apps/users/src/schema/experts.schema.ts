@@ -15,8 +15,8 @@ export class Experts extends Document {
   @Prop({ type: Types.ObjectId, ref: Users.name })
   userId: Types.ObjectId;
 
-  @Prop([String])
-  domains: string[];
+  @Prop()
+  domains: string;
 
   @Prop([String])
   subdomains: string[];
@@ -25,7 +25,7 @@ export class Experts extends Document {
   skills: string[];
 
   @Prop()
-  bio: string;
+  description: string;
 
   @Prop({ default: false })
   verified: boolean;
@@ -34,10 +34,31 @@ export class Experts extends Document {
   documents: string[];
 
   @Prop({ type: [String] })
-  contacts: string[];
+  contactLinks: string[];
+
+  @Prop({ type: [String] })
+  contactNumbers: string[];
+
+  @Prop()
+  availability?: string;
+
+  @Prop({ type: [String] })
+  sampleJob?: string[];
 
   @Prop({ type: String, enum: Object.values(ExperienceYears) })
-  experienceYears?: ExperienceYears;
+  yearsOfExperience?: ExperienceYears;
+
+  @Prop({ required: true })
+  province: string;
+
+  @Prop({ required: true })
+  city: string;
+
+  @Prop({ required: true })
+  location: string;
+
+  @Prop({ type: [String] })
+  searchKeywords: string[];
 
   @Prop({ type: Types.ObjectId, ref: Users.name })
   createdBy: Types.ObjectId;
