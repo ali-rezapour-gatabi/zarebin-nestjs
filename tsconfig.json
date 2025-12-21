@@ -28,6 +28,12 @@
       "@app/auth/*": [
         "libs/auth/src/*"
       ],
+      "@app/chromadb": [
+        "libs/chromadb/src"
+      ],
+      "@app/chromadb/*": [
+        "libs/chromadb/src/*"
+      ],
       "@app/database": [
         "libs/database/src"
       ],

@@ -68,3 +68,4 @@ export class Experts extends Document {
 }
 
 export const ExpertsSchema = SchemaFactory.createForClass(Experts);
+ExpertsSchema.index({ searchKeywords: 'text' });

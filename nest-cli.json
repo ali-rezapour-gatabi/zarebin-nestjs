@@ -26,6 +26,15 @@
         "tsConfigPath": "apps/chat/tsconfig.app.json"
       }
     },
+    "chromadb": {
+      "type": "library",
+      "root": "libs/chromadb",
+      "entryFile": "index",
+      "sourceRoot": "libs/chromadb/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/chromadb/tsconfig.lib.json"
+      }
+    },
     "database": {
       "type": "library",
       "root": "libs/database",

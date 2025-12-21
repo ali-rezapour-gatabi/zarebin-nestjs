@@ -4,8 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Users } from '../schema/users.schema';
 import { Experts } from '../schema/experts.schema';
 import { UserUpdateDto } from '../dto/update-user.dto';
-import { NlpService } from '@app/nlp';
-import { normalizePersian } from 'libs/utils/normalize-text.utils';
+import { NlpService, PromptType } from '@app/nlp';
 
 @Injectable()
 export class ExpertService {
@@ -51,13 +50,18 @@ export class ExpertService {
   }
 
   private async upsertExpert(userId: string, model: UserUpdateDto, files?: Express.Multer.File[]) {
-    const keywords = await this.nlpService.analyzeText({
-      domains: model.domains,
-      subdomains: model.subdomains,
-      skills: model.skills,
-      description: model.description,
-    });
-    const keywordNormalized = keywords.keywords.map((keyword: string) => normalizePersian(keyword));
+    const keywords = await this.nlpService.analyzeText(
+      {
+        domains: model.domains,
+        subdomains: model.subdomains,
+        skills: model.skills,
+        description: model.description,
+      },
+      PromptType.EXPERT,
+    );
+
+    const keywordArray = Array.isArray(keywords.keywords) ? keywords.keywords : [];
+
     const updateData: any = {
       domains: model.domains,
       subdomains: model.subdomains,
@@ -71,7 +75,7 @@ export class ExpertService {
       province: model.province,
       city: model.city,
       location: model.location,
-      searchKeywords: keywordNormalized,
+      searchKeywords: keywordArray,
     };
 
     if (files && files.length > 0) {
